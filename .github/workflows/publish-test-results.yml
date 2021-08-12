@@ -1,0 +1,36 @@
+name: Publish test results
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Cache Maven packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Build with Maven
+        run: mvn -B test
+      - name: Checkout Allure test scripts
+        uses: actions/checkout@v2
+        with:
+          repository: felleslosninger/eid-github-actions
+          token: ${{ secrets.EID_BUILD_PAT }}
+          path: scripts
+      - name: Publish test report to allure server
+        run: bash ./scripts/scripts/allure_test_results.sh
+        env:
+          PROJECT_REPO: ${{ github.event.repository.name }}
+          ALLURE_USER: ${{ secrets.ALLURE_USER }}
+          ALLURE_PASSWORD: ${{ secrets.ALLURE_PASSWORD }}
+          MULTI_MODULE: "false"
