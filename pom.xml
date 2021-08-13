@@ -45,6 +45,14 @@
             <version>${allure.version}</version>
             <scope>test</scope>
         </dependency>
+
+<!--        TODO: Er denne ok? -->
+        <!-- BouncyCastle -->
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpkix-jdk15on</artifactId>
+            <version>1.58</version>
+        </dependency>
     </dependencies>
 
     <build>
