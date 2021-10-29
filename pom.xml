@@ -15,7 +15,7 @@
         <artifactory.url>http://eid-artifactory.dmz.local:8080/artifactory</artifactory.url>
         <surefire.plugin.version>2.22.2</surefire.plugin.version>
         <allure.cmd.download.url>https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline</allure.cmd.download.url>
-        <allure.version>2.14.0</allure.version>
+        <allure.version>2.16.0</allure.version>
         <allure.report.version>2.4.1</allure.report.version>
         <allure.maven.version>2.10.0</allure.maven.version>
         <mockito.version>1.10.19</mockito.version>
