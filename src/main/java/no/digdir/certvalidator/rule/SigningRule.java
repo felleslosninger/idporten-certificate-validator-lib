@@ -34,6 +34,9 @@ public class SigningRule extends AbstractRule {
 
     @Override
     public Report validate(X509Certificate certificate, Report report) throws CertificateValidationException {
+        if (certificate == null) {
+            throw new CertificateValidationException("Certificate is null.");
+        }
         try {
             if (isSelfSigned(certificate)) {
                 // Self signed

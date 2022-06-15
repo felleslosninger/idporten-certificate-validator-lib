@@ -54,7 +54,6 @@ public class CRLRule extends AbstractRule {
     public static List<String> getCrlDistributionPoints(X509Certificate certificate) throws CertificateValidationException {
         try {
             ArrayList<String> urls = new ArrayList<>();
-
             if (!certificate.getNonCriticalExtensionOIDs().contains(CRL_EXTENSION))
                 return urls;
 
@@ -65,7 +64,9 @@ public class CRLRule extends AbstractRule {
                         urls.add(((DERIA5String) name.getName()).getString());
 
             return urls;
-        } catch (IOException | NullPointerException e) {
+        } catch (NullPointerException e) {
+            throw new CertificateValidationException(null);
+        } catch (IOException e) {
             throw new CertificateValidationException(e.getMessage(), e);
         }
     }
