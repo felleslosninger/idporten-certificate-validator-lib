@@ -49,7 +49,7 @@ public class SigningRuleTest {
     public void triggerException() throws Exception {
         CertificateValidationException certificateValidationException = assertThrows(CertificateValidationException.class,
                 () -> SigningRule.PublicSignedOnly().validate(null));
-        assertNull(certificateValidationException.getMessage());
+        assertEquals("Certificate is null.", certificateValidationException.getMessage());
     }
 
 }

@@ -65,6 +65,9 @@ public class NorwegianOrganizationNumberRule extends PrincipalNameRule {
      * @throws CertificateValidationException
      */
     public static NorwegianOrganization extractNumber(X509Certificate certificate) throws CertificateValidationException {
+        if (certificate == null) {
+            throw new CertificateValidationException("Certificate is null.");
+        }
         try {
             // Fetch organization name.
             List<String> name = extract(getSubject(certificate), "O");

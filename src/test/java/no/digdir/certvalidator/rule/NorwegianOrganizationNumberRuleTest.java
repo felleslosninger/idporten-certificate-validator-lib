@@ -117,7 +117,7 @@ class NorwegianOrganizationNumberRuleTest {
     public void triggerExceptionInExtractNumber() {
         CertificateValidationException certificateValidationException = assertThrows(CertificateValidationException.class,
                 () -> NorwegianOrganizationNumberRule.extractNumber(null));
-        assertNull(certificateValidationException.getMessage());
+        assertEquals("Certificate is null.", certificateValidationException.getMessage());
     }
 
     @Test
