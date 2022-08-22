@@ -4,6 +4,7 @@ import no.digdir.certvalidator.api.CrlCache;
 
 import java.security.cert.X509CRL;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 /**
@@ -25,4 +26,13 @@ public class SimpleCrlCache implements CrlCache {
         else
             storage.put(url, crl);
     }
+
+    /**
+     * Gets url's currently in cache
+     * @return cache keys
+     */
+    protected Set<String> getUrls() {
+        return storage.keySet();
+    }
+
 }
