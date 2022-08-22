@@ -19,6 +19,8 @@ public class SimpleAsyncCrlCache extends SimpleCrlCache {
      */
     public static final long DEFAULT_LIFTETIME_MEM_CACHE_MILLIS = 15 * 60 * 1000;
 
+    private CacheUpdater cacheUpdater;
+
     /**
      * Create an instance using default refresh interval.
      */
@@ -32,15 +34,18 @@ public class SimpleAsyncCrlCache extends SimpleCrlCache {
      * @param refreshIntervalMillis refresh interval, ignored if not larger than 0
      */
     public SimpleAsyncCrlCache(long refreshIntervalMillis) {
-        new Thread(
-                new CacheUpdater(this, refreshIntervalMillis > 0 ? refreshIntervalMillis : DEFAULT_LIFTETIME_MEM_CACHE_MILLIS))
-                .start();
+        this.cacheUpdater = new CacheUpdater(this, refreshIntervalMillis > 0 ? refreshIntervalMillis : DEFAULT_LIFTETIME_MEM_CACHE_MILLIS);
+        new Thread(cacheUpdater).start();
     }
 
     @Override
     public void set(String url, X509CRL crl) {
         super.set(url, crl);
         log.info("Cached CRL {}: CRL last updated by {}, CRL next update {}", url, crl.getThisUpdate(), crl.getNextUpdate());
+    }
+
+    public void stopUpdater() {
+        this.cacheUpdater.stop();
     }
 
     /**
@@ -51,20 +56,27 @@ public class SimpleAsyncCrlCache extends SimpleCrlCache {
 
         private final SimpleCrlCache crlCache;
         private final long refhreshIntervalMillis;
+        private boolean keepRunning;
 
         public CacheUpdater(SimpleCrlCache crlCache, long refhreshIntervalMillis) {
             this.crlCache = Objects.requireNonNull(crlCache);
             this.refhreshIntervalMillis = refhreshIntervalMillis;
         }
 
+        public void stop() {
+            this.keepRunning = false;
+        }
+
         @Override
         public void run() {
+            keepRunning = true;
             try { // start slowly
                 Thread.sleep(30 * 1000);
             } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
             log.info("Starting CRL cache update thread with interval {} milliseconds", refhreshIntervalMillis);
-            while (true) {
+            while (keepRunning) {
                 Set<String> crlDistributionPoints = new HashSet<>(crlCache.getUrls());
                 for (String crlDistributionPoint : crlDistributionPoints) {
                     try {
@@ -77,9 +89,10 @@ public class SimpleAsyncCrlCache extends SimpleCrlCache {
                 try {
                     Thread.sleep(refhreshIntervalMillis);
                 } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                 }
             }
-
+            log.info("Stopped CRL cache updater");
         }
     }
 
