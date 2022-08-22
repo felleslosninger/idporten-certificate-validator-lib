@@ -11,6 +11,7 @@ import java.util.Set;
 /**
  * In-memory implementation of CRL cache that attempts to load all CRLs in cache at scheduled intervals.
  */
+@Slf4j
 public class SimpleAsyncCrlCache extends SimpleCrlCache {
 
     /**
@@ -34,6 +35,12 @@ public class SimpleAsyncCrlCache extends SimpleCrlCache {
         new Thread(
                 new CacheUpdater(this, refreshIntervalMillis > 0 ? refreshIntervalMillis : DEFAULT_LIFTETIME_MEM_CACHE_MILLIS))
                 .start();
+    }
+
+    @Override
+    public void set(String url, X509CRL crl) {
+        super.set(url, crl);
+        log.info("Cached CRL {}: CRL last updated by {}, CRL next update {}", url, crl.getThisUpdate(), crl.getNextUpdate());
     }
 
     /**
@@ -63,7 +70,6 @@ public class SimpleAsyncCrlCache extends SimpleCrlCache {
                     try {
                         X509CRL crl = CrlUtils.load(new URL(crlDistributionPoint).openStream());
                         crlCache.set(crlDistributionPoint, crl);
-                        log.info("CRL downloaded from {}: CRL last updated by CA {}, CRL next update {}", crlDistributionPoint, crl.getThisUpdate(), crl.getNextUpdate());
                     } catch (Exception e) {
                         log.warn("Failed to fetch CRL from {}", crlDistributionPoint, e);
                     }
