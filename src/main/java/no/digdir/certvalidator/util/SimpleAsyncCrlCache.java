@@ -41,7 +41,7 @@ public class SimpleAsyncCrlCache extends SimpleCrlCache {
     @Override
     public void set(String url, X509CRL crl) {
         super.set(url, crl);
-        log.info("Cached CRL {}: CRL last updated by {}, CRL next update {}", url, crl.getThisUpdate(), crl.getNextUpdate());
+        log.info("Cached CRL {}: CRL last updated {}, CRL next update {}", url, crl.getThisUpdate(), crl.getNextUpdate());
     }
 
     public void stopUpdater() {
