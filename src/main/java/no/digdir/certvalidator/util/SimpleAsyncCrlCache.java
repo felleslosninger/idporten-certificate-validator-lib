@@ -1,6 +1,7 @@
 package no.digdir.certvalidator.util;
 
 import lombok.extern.slf4j.Slf4j;
+import no.digdir.certvalidator.api.AsyncCrlCache;
 
 import java.net.URL;
 import java.security.cert.X509CRL;
@@ -12,7 +13,7 @@ import java.util.Set;
  * In-memory implementation of CRL cache that attempts to load all CRLs in cache at scheduled intervals.
  */
 @Slf4j
-public class SimpleAsyncCrlCache extends SimpleCrlCache {
+public class SimpleAsyncCrlCache extends SimpleCrlCache implements AsyncCrlCache {
 
     /**
      * Default interval for asynchronous cache refresh is 15 minutes
@@ -35,7 +36,6 @@ public class SimpleAsyncCrlCache extends SimpleCrlCache {
      */
     public SimpleAsyncCrlCache(long refreshIntervalMillis) {
         this.cacheUpdater = new CacheUpdater(this, refreshIntervalMillis > 0 ? refreshIntervalMillis : DEFAULT_LIFTETIME_MEM_CACHE_MILLIS);
-        new Thread(cacheUpdater).start();
     }
 
     @Override
@@ -44,7 +44,13 @@ public class SimpleAsyncCrlCache extends SimpleCrlCache {
         log.info("Cached CRL {}: CRL last updated {}, CRL next update {}", url, crl.getThisUpdate(), crl.getNextUpdate());
     }
 
-    public void stopUpdater() {
+    @Override
+    public void start() {
+        new Thread(this.cacheUpdater).start();
+    }
+
+    @Override
+    public void stop() {
         this.cacheUpdater.stop();
     }
 
