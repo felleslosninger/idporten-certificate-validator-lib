@@ -11,7 +11,7 @@ import java.util.Date;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@DisplayName("When fetching and caching CRLs")
+@DisplayName("When fetching and caching CRLs using a failsafe fetcher")
 public class CachingCrlFetcherTest {
 
     @DisplayName("then a cache miss will trigger a download")
