@@ -4,9 +4,6 @@ import no.digdir.certvalidator.api.CertificateValidationException;
 import no.digdir.certvalidator.api.CrlCache;
 import no.digdir.certvalidator.api.CrlFetcher;
 
-import java.io.IOException;
-import java.net.URI;
-import java.security.cert.CRLException;
 import java.security.cert.X509CRL;
 
 /**
@@ -37,23 +34,7 @@ public class SimpleCachingCrlFetcher implements CrlFetcher {
     }
 
     protected X509CRL download(String url) throws CertificateValidationException {
-        if (url != null && url.matches("http[s]{0,1}://.*")) {
-            X509CRL crl = httpDownload(url);
-            crlCache.set(url, crl);
-            return crl;
-        } else if (url != null && url.startsWith("ldap://")) {
-            // Currently not supported.
-            return null;
-        }
-
-        return null;
+        return CrlUtils.download(url);
     }
 
-    protected X509CRL httpDownload(String url) throws CertificateValidationException {
-        try {
-            return CrlUtils.load(URI.create(url).toURL().openStream());
-        } catch (IOException | CRLException e) {
-            throw new CertificateValidationException(String.format("Failed to download CRL '%s' (%s)", url, e.getMessage()), e);
-        }
-    }
 }

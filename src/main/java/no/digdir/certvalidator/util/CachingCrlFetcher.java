@@ -24,9 +24,9 @@ public class CachingCrlFetcher extends SimpleCachingCrlFetcher {
         X509CRL crl = this.crlCache.get(url);
         try {
             if (crl == null) {
-                crl = this.download(url);
+                crl = super.download(url);
             } else if (crl.getNextUpdate() != null && crl.getNextUpdate().getTime() < System.currentTimeMillis()) {
-                crl = this.download(url);
+                crl = super.download(url);
             }
         } catch (CertificateValidationException e) {
             logger.error("Failed to retrieve CRL list", e);
