@@ -31,7 +31,7 @@ public class SimpleAsyncCrlCacheTest {
 
         // stop the cache and check state
         crlCache.stop();
-        assertFalse(crlCache.getCacheUpdater().isKeepRunning());
+        assertFalse(crlCache.getCacheUpdater().isRunning());
         assertEquals(2, crlCache.getUrls().size());
 
         // wait a little and check no more downloads

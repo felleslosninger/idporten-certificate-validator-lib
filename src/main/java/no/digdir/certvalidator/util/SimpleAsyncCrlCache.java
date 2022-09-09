@@ -87,21 +87,21 @@ public class SimpleAsyncCrlCache extends SimpleCrlCache implements AsyncCrlCache
         private final SimpleAsyncCrlCache crlCache;
         private final long refhreshIntervalMillis;
         private final long initialDelayMillis;
-        private boolean keepRunning;
+        private boolean running;
 
         public CacheUpdater(SimpleAsyncCrlCache crlCache, long initialDelayMillis, long refhreshIntervalMillis) {
             this.crlCache = Objects.requireNonNull(crlCache);
             this.initialDelayMillis = initialDelayMillis;
             this.refhreshIntervalMillis = refhreshIntervalMillis;
-            this.keepRunning = true;
+            this.running = true;
         }
 
         public void stop() {
-            this.keepRunning = false;
+            this.running = false;
         }
 
-        public boolean isKeepRunning() {
-            return this.keepRunning;
+        public boolean isRunning() {
+            return this.running;
         }
 
         @Override
@@ -112,7 +112,7 @@ public class SimpleAsyncCrlCache extends SimpleCrlCache implements AsyncCrlCache
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
-            while (keepRunning) {
+            while (running) {
                 Set<String> crlDistributionPoints = new HashSet<>(crlCache.getUrls());
                 for (String crlDistributionPoint : crlDistributionPoints) {
                     try {
