@@ -2,8 +2,8 @@ package no.digdir.certvalidator.util;
 
 import lombok.extern.slf4j.Slf4j;
 import no.digdir.certvalidator.api.AsyncCrlCache;
+import no.digdir.certvalidator.api.CertificateValidationException;
 
-import java.net.URL;
 import java.security.cert.X509CRL;
 import java.util.HashSet;
 import java.util.Objects;
@@ -16,6 +16,11 @@ import java.util.Set;
 public class SimpleAsyncCrlCache extends SimpleCrlCache implements AsyncCrlCache {
 
     /**
+     * Default initial delay for asynchronous cache update is 30 seconds
+     */
+    public static final long DEFAULT_INIT_DELAY_MEM_CACHE_MILLIS = 30 * 1000;
+
+    /**
      * Default interval for asynchronous cache refresh is 15 minutes
      */
     public static final long DEFAULT_LIFTETIME_MEM_CACHE_MILLIS = 15 * 60 * 1000;
@@ -23,19 +28,30 @@ public class SimpleAsyncCrlCache extends SimpleCrlCache implements AsyncCrlCache
     private CacheUpdater cacheUpdater;
 
     /**
-     * Create an instance using default refresh interval.
+     * Create an instance using default initial delay and refresh interval.
      */
     public SimpleAsyncCrlCache() {
-        this(DEFAULT_LIFTETIME_MEM_CACHE_MILLIS);
+        this(DEFAULT_INIT_DELAY_MEM_CACHE_MILLIS, DEFAULT_LIFTETIME_MEM_CACHE_MILLIS);
+    }
+
+    /**
+     * Create an instance using default initial delay and provided refresh interval.
+     */
+    public SimpleAsyncCrlCache(long refreshIntervalMillis) {
+        this(DEFAULT_INIT_DELAY_MEM_CACHE_MILLIS, refreshIntervalMillis);
     }
 
     /**
      * Create an instance using provided refresh interval.
      *
+     * @param initialDelayMillis    initial delay for a relaxed start, ignored if not larger than 0
      * @param refreshIntervalMillis refresh interval, ignored if not larger than 0
      */
-    public SimpleAsyncCrlCache(long refreshIntervalMillis) {
-        this.cacheUpdater = new CacheUpdater(this, refreshIntervalMillis > 0 ? refreshIntervalMillis : DEFAULT_LIFTETIME_MEM_CACHE_MILLIS);
+    public SimpleAsyncCrlCache(long initialDelayMillis, long refreshIntervalMillis) {
+        this.cacheUpdater = new CacheUpdater(
+                this,
+                initialDelayMillis > 0 ? initialDelayMillis : DEFAULT_INIT_DELAY_MEM_CACHE_MILLIS,
+                refreshIntervalMillis > 0 ? refreshIntervalMillis : DEFAULT_LIFTETIME_MEM_CACHE_MILLIS);
     }
 
     @Override
@@ -54,40 +70,53 @@ public class SimpleAsyncCrlCache extends SimpleCrlCache implements AsyncCrlCache
         this.cacheUpdater.stop();
     }
 
+    protected CacheUpdater getCacheUpdater() {
+        return this.cacheUpdater;
+    }
+
+    protected void setCacheUpdater(CacheUpdater cacheUpdater) {
+        this.cacheUpdater = cacheUpdater;
+    }
+
     /**
      * Runnable re-loading all CRLs in cache at configured refresh interval.  Logs a warning if a CRL fails.
      */
     @Slf4j
     static class CacheUpdater implements Runnable {
 
-        private final SimpleCrlCache crlCache;
+        private final SimpleAsyncCrlCache crlCache;
         private final long refhreshIntervalMillis;
-        private boolean keepRunning;
+        private final long initialDelayMillis;
+        private boolean running;
 
-        public CacheUpdater(SimpleCrlCache crlCache, long refhreshIntervalMillis) {
+        public CacheUpdater(SimpleAsyncCrlCache crlCache, long initialDelayMillis, long refhreshIntervalMillis) {
             this.crlCache = Objects.requireNonNull(crlCache);
+            this.initialDelayMillis = initialDelayMillis;
             this.refhreshIntervalMillis = refhreshIntervalMillis;
+            this.running = true;
         }
 
         public void stop() {
-            this.keepRunning = false;
+            this.running = false;
+        }
+
+        public boolean isRunning() {
+            return this.running;
         }
 
         @Override
         public void run() {
-            keepRunning = true;
+            log.info("Starting CRL cache update thread with initial delay {} milliseconds and interval {} milliseconds", initialDelayMillis, refhreshIntervalMillis);
             try { // start slowly
-                Thread.sleep(30 * 1000);
+                Thread.sleep(initialDelayMillis);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
-            log.info("Starting CRL cache update thread with interval {} milliseconds", refhreshIntervalMillis);
-            while (keepRunning) {
+            while (running) {
                 Set<String> crlDistributionPoints = new HashSet<>(crlCache.getUrls());
                 for (String crlDistributionPoint : crlDistributionPoints) {
                     try {
-                        X509CRL crl = CrlUtils.load(new URL(crlDistributionPoint).openStream());
-                        crlCache.set(crlDistributionPoint, crl);
+                        crlCache.set(crlDistributionPoint, download(crlDistributionPoint));
                     } catch (Exception e) {
                         log.warn("Failed to fetch CRL from {}", crlDistributionPoint, e);
                     }
@@ -100,6 +129,11 @@ public class SimpleAsyncCrlCache extends SimpleCrlCache implements AsyncCrlCache
             }
             log.info("Stopped CRL cache updater");
         }
+
+        protected X509CRL download(String url) throws CertificateValidationException {
+            return CrlUtils.download(url);
+        }
+
     }
 
 }
