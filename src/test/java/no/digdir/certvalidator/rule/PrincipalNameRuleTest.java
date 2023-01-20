@@ -3,17 +3,11 @@ package no.digdir.certvalidator.rule;
 import no.digdir.certvalidator.ValidatorBuilder;
 import no.digdir.certvalidator.api.CertificateValidationException;
 import no.digdir.certvalidator.api.FailedValidationException;
-import no.digdir.certvalidator.api.PrincipalNameProvider;
 import no.digdir.certvalidator.util.SimplePrincipalNameProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
-import java.security.cert.CertificateEncodingException;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
 
 @DisplayName("When invoking PrincipalNameRule on a certificate with subject C=NO and issuer C=DK")
 public class PrincipalNameRuleTest {
