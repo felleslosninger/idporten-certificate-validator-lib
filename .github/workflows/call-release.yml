@@ -1,0 +1,19 @@
+# This workflow will build a Java project with Maven
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: Release to github packages
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  call-workflow-release:
+    uses: felleslosninger/eid-github-workflows/.github/workflows/maven-release-lib.yml@main
+    with:
+      java-version: 8
+    secrets:
+      packages-user: ${{ secrets.CREATE_PACKAGES_USER }}
+      packages-token: ${{ secrets.CREATE_PACKAGES_TOKEN }}
+      maven-user: ${{ secrets.MAVEN_USER }}
+      maven-password: ${{ secrets.MAVEN_PASSWORD }}
