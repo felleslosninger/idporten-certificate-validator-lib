@@ -14,10 +14,6 @@
         <junit-jupiter-version>5.9.2</junit-jupiter-version>
         <artifactory.url>http://eid-artifactory.dmz.local:8080/artifactory</artifactory.url>
         <surefire.plugin.version>2.22.2</surefire.plugin.version>
-        <allure.cmd.download.url>https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline</allure.cmd.download.url>
-        <allure.version>2.20.1</allure.version>
-        <allure.report.version>2.4.1</allure.report.version>
-        <allure.maven.version>2.12.0</allure.maven.version>
         <mockito.version>1.10.19</mockito.version>
     </properties>
 
@@ -46,14 +42,6 @@
             <version>${junit-jupiter-version}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>io.qameta.allure</groupId>
-            <artifactId>allure-junit5</artifactId>
-            <version>${allure.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-<!--        TODO: Er denne ok? -->
         <!-- BouncyCastle -->
         <dependency>
             <groupId>org.bouncycastle</groupId>
@@ -82,19 +70,9 @@
                             <name>junit.jupiter.extensions.autodetection.enabled</name>
                             <value>true</value>
                         </property>
-                        <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
                     </systemProperties>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>io.qameta.allure</groupId>
-                <artifactId>allure-maven</artifactId>
-                <version>${allure.maven.version}</version>
-                <configuration>
-                    <reportVersion>${allure.report.version}</reportVersion>
-                </configuration>
-            </plugin>
-
         </plugins>
     </build>
 
