@@ -121,9 +121,9 @@ class NorwegianOrganizationNumberRuleTest {
     }
 
     @Test
-    @DisplayName("validation should pass with valid PSD2 certificate from Buypass")
+    @DisplayName("validation should pass with valid certificate issued by Commfides")
     public void testingMoveCertificate() throws Exception {
-        X509Certificate certificate = Validator.getCertificate(getClass().getResourceAsStream("/DIG_psd2.cer"));
+        X509Certificate certificate = Validator.getCertificate(getClass().getResourceAsStream("/digdir_seid2.cer"));
 
         Validator validator = ValidatorBuilder.newInstance()
                 .addRule(new ExpirationRule())
