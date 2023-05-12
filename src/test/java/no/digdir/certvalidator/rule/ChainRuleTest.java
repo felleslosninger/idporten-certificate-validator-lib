@@ -21,8 +21,8 @@ public class ChainRuleTest {
     @DisplayName("Simple, valid certificate chain should validate ok")
     @Test
     public void simple() throws Exception {
-        X509Certificate intermediateCertificate = Validator.getCertificate(getClass().getResourceAsStream("/Buypass_Class_3_Test4_CA_G2_ST_Business_Buypass_Class_3_Test4_Root_CA_G2_ST_intermediary.cer"));
-        X509Certificate rootCertificate = Validator.getCertificate(getClass().getResourceAsStream("/Buypass_Class_3_Test4_Root_CA_G2_ST_root.cer"));
+        X509Certificate intermediateCertificate = Validator.getCertificate(getClass().getResourceAsStream("/commfides_intermediate_g3_test.cer"));
+        X509Certificate rootCertificate = Validator.getCertificate(getClass().getResourceAsStream("/commfides_root_g3_test.cer"));
         CertificateBucket rootCertificates = new SimpleCertificateBucket(rootCertificate);
         CertificateBucket intermediateCertificates = new SimpleCertificateBucket(intermediateCertificate);
 
@@ -30,9 +30,9 @@ public class ChainRuleTest {
                 .addRule(new ChainRule(rootCertificates, intermediateCertificates))
                 .build();
 
-        validator.validate(getClass().getResourceAsStream("/buypass-psd2.cer"));
-        validator.validate(getClass().getResourceAsStream("/Buypass_Class_3_Test4_CA_G2_ST_Business_Buypass_Class_3_Test4_Root_CA_G2_ST_intermediary.cer"));
-        validator.validate(getClass().getResourceAsStream("/Buypass_Class_3_Test4_Root_CA_G2_ST_root.cer"), SimpleReport.newInstance());
+        validator.validate(getClass().getResourceAsStream("/digdir_seid2.cer"));
+        validator.validate(getClass().getResourceAsStream("/commfides_intermediate_g3_test.cer"));
+        validator.validate(getClass().getResourceAsStream("/commfides_root_g3_test.cer"), SimpleReport.newInstance());
     }
 
     @DisplayName("If root certificates are missing, should fail with message")
