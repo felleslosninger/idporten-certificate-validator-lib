@@ -62,7 +62,9 @@ public class SimpleAsyncCrlCache extends SimpleCrlCache implements AsyncCrlCache
 
     @Override
     public void start() {
-        new Thread(this.cacheUpdater).start();
+        Thread t = new Thread(this.cacheUpdater, "CRLUpdater");
+        t.setDaemon(true);
+        t.start();
     }
 
     @Override
