@@ -12,7 +12,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Validator checking validity of chain using root certificates and intermediate certificates.
+ * Validator checking validity of chain using root certificates and intermediate certificates.  This validator
+ * can also check policies.  The PolicyRule can be used for a more flexible policy validation with wildcards.
  */
 public class ChainRule extends AbstractRule {
 
@@ -29,6 +30,7 @@ public class ChainRule extends AbstractRule {
     /**
      * @param rootCertificates         Trusted root certificates.
      * @param intermediateCertificates Trusted intermediate certificates.
+     * @param policies               Accepted policies
      */
     public ChainRule(CertificateBucket rootCertificates, CertificateBucket intermediateCertificates, String... policies) {
         this.rootCertificates = rootCertificates;
