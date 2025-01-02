@@ -16,21 +16,11 @@ import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 
 import java.math.BigInteger;
-import java.security.InvalidKeyException;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.SecureRandom;
-import java.security.Security;
-import java.security.SignatureException;
+import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
@@ -39,7 +29,7 @@ public class X509TestGenerator {
 
     public X509Certificate createX509Certificate(Date from, Date to) throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, CertificateException, OperatorCreationException, CertIOException {
         String domainName = "test";
-        return createX509Certificate(null, "CN=" + domainName + ", OU=None, O=None L=None, C=None", null, from, to);
+        return createX509Certificate(null, "CN=" + domainName + ", OU=None, O=None, L=None, C=None", null, from, to);
     }
 
     public X509Certificate createX509Certificate(String subject, X509ExtensionCustom custom, Date from, Date to) throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, CertificateException, OperatorCreationException, CertIOException {
@@ -60,7 +50,7 @@ public class X509TestGenerator {
         if(issuer != null)
             issuerName = new X500Name(issuer.getSubjectX500Principal().getName());
         else
-            issuerName = new X500Name("CN=" + "test" + ", OU=None, O=None L=None, C=None");
+            issuerName = new X500Name("CN=" + "test" + ", OU=None, O=None, L=None, C=None");
 
         SubjectPublicKeyInfo subjPubKeyInfo = new SubjectPublicKeyInfo(ASN1Sequence.getInstance(RSAPubKey.getEncoded()));
 
@@ -87,7 +77,7 @@ public class X509TestGenerator {
 
     public X509Certificate createX509Certificate(X509ExtensionCustom x509ExtensionCustom) throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, CertificateException, OperatorCreationException, CertIOException {
         String domainName = "test";
-        return createX509Certificate("CN=" + domainName + ", OU=None, O=None L=None, C=None", x509ExtensionCustom, toDate(ZonedDateTime.now(ZoneId.systemDefault()).minusYears(1)), toDate(ZonedDateTime.now(ZoneId.systemDefault()).plusYears(1)));
+        return createX509Certificate("CN=" + domainName + ", OU=None, O=None, L=None, C=None", x509ExtensionCustom, toDate(ZonedDateTime.now(ZoneId.systemDefault()).minusYears(1)), toDate(ZonedDateTime.now(ZoneId.systemDefault()).plusYears(1)));
     }
 
     public X509Certificate createX509Certificate() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, CertificateException, OperatorCreationException, CertIOException {
