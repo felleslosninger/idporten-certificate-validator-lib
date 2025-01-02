@@ -21,7 +21,7 @@ class NorwegianOrganizationNumberRuleTest {
     @DisplayName("orgnumber should be extracted correctly when in field serialNumber")
     public void shouldExtractOrgnumberFromCertBasedOnSerialnumber() throws Exception {
         final String ORGNR = "123456789";
-        X509Certificate cert = x509TestGenerator.createX509Certificate("CN=name, OU=None, O=None L=None, C=None, serialNumber=" + ORGNR);
+        X509Certificate cert = x509TestGenerator.createX509Certificate("CN=name, OU=None, O=None, L=None, C=None, serialNumber=" + ORGNR);
 
         new NorwegianOrganizationNumberRule(value -> {
             assertEquals(ORGNR, value);
@@ -33,7 +33,7 @@ class NorwegianOrganizationNumberRuleTest {
     @DisplayName("orgnumber should be extracted correctly when in field 2.5.4.97")
     public void shouldExtractOrgnumberFromCertBasedOnPSD2() throws Exception {
         final String ORGNR = "123456789";
-        X509Certificate cert = x509TestGenerator.createX509Certificate("CN=name, OU=None, O=None L=None, C=None, 2.5.4.97=PSDNO-FSA-" + ORGNR);
+        X509Certificate cert = x509TestGenerator.createX509Certificate("CN=name, OU=None, O=None, L=None, C=None, 2.5.4.97=PSDNO-FSA-" + ORGNR);
 
         new NorwegianOrganizationNumberRule(value -> {
             assertEquals(ORGNR, value);
@@ -45,7 +45,7 @@ class NorwegianOrganizationNumberRuleTest {
     @DisplayName("validation should fail if orgnr is on invalid format")
     public void invalidOrgnumberFromCertBasedOnSerialnumber() throws Exception {
         final String ORGNR = "123 456 789";
-        X509Certificate cert = x509TestGenerator.createX509Certificate("CN=name, OU=None, O=None L=None, C=None, serialNumber=" + ORGNR);
+        X509Certificate cert = x509TestGenerator.createX509Certificate("CN=name, OU=None, O=None, L=None, C=None, serialNumber=" + ORGNR);
         FailedValidationException failedValidationException = assertThrows(FailedValidationException.class,
                 () -> new NorwegianOrganizationNumberRule(value -> true).validate(cert));
         assertEquals("Organization number not detected.", failedValidationException.getMessage());
@@ -101,7 +101,7 @@ class NorwegianOrganizationNumberRuleTest {
     @DisplayName("validation should fail when name rule of wrapped PrincipalNameProvider fails")
     public void notAcceptedOrgnumberFromCertBasedOnSerialnumber() throws Exception {
         final String ORGNR = "123456789";
-        X509Certificate cert = x509TestGenerator.createX509Certificate("CN=name, OU=None, O=None L=None, C=None, serialNumber=" + ORGNR);
+        X509Certificate cert = x509TestGenerator.createX509Certificate("CN=name, OU=None, O=None, L=None, C=None, serialNumber=" + ORGNR);
 
         FailedValidationException exception = assertThrows(FailedValidationException.class,
                 () -> new NorwegianOrganizationNumberRule(
