@@ -20,4 +20,4 @@ Ta i bruk i ditt prosjekt ved å legge til avhengighet i pom.xml:
     <groupId>no.idporten.validator.certificate</groupId>
     <artifactId>idporten-certvalidator</artifactId>
 </dependency>
-'''
+```
