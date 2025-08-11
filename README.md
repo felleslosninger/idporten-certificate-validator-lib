@@ -21,4 +21,4 @@ Ta i bruk i ditt prosjekt ved å legge til avhengighet i pom.xml:
     <artifactId>idporten-certvalidator</artifactId>
 </dependency>
 ```
-Bruk [ValidatorBuilder](src/main/java/no/idporten/validator/certificate/ValidatorBuilder.java) for å konstruere en [Validator](src/main/java/no/idporten/validator/certificate/Validator.java) med de [reglene](src/main/java/no/idporten/validator/certificate/rule) som ønskes.
+Bruk [ValidatorBuilder](src/main/java/no/idporten/validator/certificate/ValidatorBuilder.java) for å konstruere en [Validator](src/main/java/no/idporten/validator/certificate/Validator.java) med de reglene som ønskes fra javaklassene i pakken [src/main/java/no/idporten/validator/certificate/rule](src/main/java/no/idporten/validator/certificate/rule).
