@@ -89,14 +89,14 @@ public class SimpleAsyncCrlCache extends SimpleCrlCache implements AsyncCrlCache
 
         private final Logger log = LoggerFactory.getLogger(CacheUpdater.class);
         private final SimpleAsyncCrlCache crlCache;
-        private final long refhreshIntervalMillis;
+        private final long refreshIntervalMillis;
         private final long initialDelayMillis;
         private boolean running;
 
-        public CacheUpdater(SimpleAsyncCrlCache crlCache, long initialDelayMillis, long refhreshIntervalMillis) {
+        public CacheUpdater(SimpleAsyncCrlCache crlCache, long initialDelayMillis, long refreshIntervalMillis) {
             this.crlCache = Objects.requireNonNull(crlCache);
             this.initialDelayMillis = initialDelayMillis;
-            this.refhreshIntervalMillis = refhreshIntervalMillis;
+            this.refreshIntervalMillis = refreshIntervalMillis;
             this.running = true;
         }
 
@@ -110,7 +110,7 @@ public class SimpleAsyncCrlCache extends SimpleCrlCache implements AsyncCrlCache
 
         @Override
         public void run() {
-            log.info("Starting CRL cache update thread with initial delay {} milliseconds and interval {} milliseconds", initialDelayMillis, refhreshIntervalMillis);
+            log.info("Starting CRL cache update thread with initial delay {} milliseconds and interval {} milliseconds", initialDelayMillis, refreshIntervalMillis);
             try { // start slowly
                 Thread.sleep(initialDelayMillis);
             } catch (InterruptedException e) {
@@ -126,7 +126,7 @@ public class SimpleAsyncCrlCache extends SimpleCrlCache implements AsyncCrlCache
                     }
                 }
                 try {
-                    Thread.sleep(refhreshIntervalMillis);
+                    Thread.sleep(refreshIntervalMillis);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }

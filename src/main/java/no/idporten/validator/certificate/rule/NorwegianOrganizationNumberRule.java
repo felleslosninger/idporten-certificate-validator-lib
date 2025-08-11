@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 /**
  * Implementation of fetching of Norwegian organization number from certificates.
  * <p/>
- * Use of organization numbers in certificates is defines here:
+ * Use of organization numbers in certificates is defined here:
  * http://www.regjeringen.no/upload/FAD/Vedlegg/IKT-politikk/SEID_Leveranse_1_-_v1.02.pdf (page 24)
  */
 public class NorwegianOrganizationNumberRule extends PrincipalNameRule {
@@ -28,12 +28,7 @@ public class NorwegianOrganizationNumberRule extends PrincipalNameRule {
     private static final Pattern patternOrganizationName = Pattern.compile("^.+\\-\\W*([0-9]{9})$");
 
     public NorwegianOrganizationNumberRule() {
-        this(new PrincipalNameProvider<String>() {
-            @Override
-            public boolean validate(String value) {
-                return true;
-            }
-        });
+        this(value -> true);
     }
 
     public NorwegianOrganizationNumberRule(PrincipalNameProvider<String> provider) {

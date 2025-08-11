@@ -20,7 +20,7 @@ public class SimpleReport implements Report {
     }
 
     private SimpleReport() {
-        this(new HashMap<Property, Object>());
+        this(new HashMap<>());
     }
 
     private SimpleReport(Map<Property, Object> values) {

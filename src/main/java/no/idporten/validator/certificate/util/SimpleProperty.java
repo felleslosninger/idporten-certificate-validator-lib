@@ -8,7 +8,7 @@ import no.idporten.validator.certificate.api.Property;
 public class SimpleProperty<T> implements Property<T> {
 
     public static <T> Property<T> create() {
-        return (Property<T>) new SimpleProperty<>();
+        return new SimpleProperty<>();
     }
 
     private SimpleProperty() {
