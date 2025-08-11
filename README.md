@@ -14,6 +14,11 @@ Man bygger prosjektet
 
     mvn assembly:assembly
 
-Kjøre
-
-    java -jar target/idporten-certvalidator-DEV-SNAPSHOT-jar-with-dependencies.jar
+Ta i bruk i ditt prosjekt ved å legge til avhengighet i pom.xml:
+'''
+```xml
+<dependency>
+    <groupId>no.idporten.validator.certificate</groupId>
+    <artifactId>idporten-certvalidator</artifactId>
+</dependency>
+'''
