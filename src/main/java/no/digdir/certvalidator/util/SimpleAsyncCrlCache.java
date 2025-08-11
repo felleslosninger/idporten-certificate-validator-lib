@@ -1,8 +1,9 @@
 package no.digdir.certvalidator.util;
 
-import lombok.extern.slf4j.Slf4j;
 import no.digdir.certvalidator.api.AsyncCrlCache;
 import no.digdir.certvalidator.api.CertificateValidationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.security.cert.X509CRL;
 import java.util.HashSet;
@@ -12,8 +13,9 @@ import java.util.Set;
 /**
  * In-memory implementation of CRL cache that attempts to load all CRLs in cache at scheduled intervals.
  */
-@Slf4j
 public class SimpleAsyncCrlCache extends SimpleCrlCache implements AsyncCrlCache {
+
+    private final Logger log = LoggerFactory.getLogger(SimpleAsyncCrlCache.class);
 
     /**
      * Default initial delay for asynchronous cache update is 30 seconds
@@ -83,9 +85,9 @@ public class SimpleAsyncCrlCache extends SimpleCrlCache implements AsyncCrlCache
     /**
      * Runnable re-loading all CRLs in cache at configured refresh interval.  Logs a warning if a CRL fails.
      */
-    @Slf4j
     static class CacheUpdater implements Runnable {
 
+        private final Logger log = LoggerFactory.getLogger(CacheUpdater.class);
         private final SimpleAsyncCrlCache crlCache;
         private final long refhreshIntervalMillis;
         private final long initialDelayMillis;
