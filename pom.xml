@@ -3,14 +3,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>no.digdir.eid</groupId>
-    <artifactId>eid-certvalidator</artifactId>
+    <groupId>no.idporten.validator.certificate</groupId>
+    <artifactId>idporten-certvalidator</artifactId>
     <version>DEV-SNAPSHOT</version>
-    <name>EId certificate validator</name>
-    <description>Validator for certificates used in Idporten and Maskinporten</description>
+    <name>ID-porten certificate validator</name>
+    <description>Validator for certificates</description>
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
         <junit-jupiter-version>5.13.4</junit-jupiter-version>
         <surefire.plugin.version>3.5.3</surefire.plugin.version>
         <mockito.version>1.10.19</mockito.version>
@@ -28,12 +28,6 @@
             <artifactId>slf4j-api</artifactId>
             <version>2.0.17</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.38</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
