@@ -1,0 +1,38 @@
+package no.idporten.validator.certificate.util;
+
+import no.idporten.validator.certificate.api.CrlCache;
+
+import java.security.cert.X509CRL;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+
+/**
+ * In-memory implementation of CRL cache. Used as default implementation.
+ */
+public class SimpleCrlCache implements CrlCache {
+
+    private Map<String, X509CRL> storage = new TreeMap<>();
+
+    @Override
+    public X509CRL get(String url) {
+        return storage.get(url);
+    }
+
+    @Override
+    public void set(String url, X509CRL crl) {
+        if (crl == null)
+            storage.remove(url);
+        else
+            storage.put(url, crl);
+    }
+
+    /**
+     * Gets url's currently in cache
+     * @return cache keys
+     */
+    protected Set<String> getUrls() {
+        return storage.keySet();
+    }
+
+}
