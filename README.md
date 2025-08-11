@@ -15,7 +15,6 @@ Man bygger prosjektet
     mvn assembly:assembly
 
 Ta i bruk i ditt prosjekt ved å legge til avhengighet i pom.xml:
-'''
 ```xml
 <dependency>
     <groupId>no.idporten.validator.certificate</groupId>
