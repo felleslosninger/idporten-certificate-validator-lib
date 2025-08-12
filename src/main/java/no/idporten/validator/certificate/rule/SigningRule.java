@@ -39,7 +39,7 @@ public class SigningRule extends AbstractRule {
         }
         try {
             if (isSelfSigned(certificate)) {
-                // Self signed
+                // Self-signed
                 if (kind.equals(Kind.PUBLIC_SIGNED_ONLY))
                     throw new FailedValidationException("Certificate should be publicly signed.");
             } else {

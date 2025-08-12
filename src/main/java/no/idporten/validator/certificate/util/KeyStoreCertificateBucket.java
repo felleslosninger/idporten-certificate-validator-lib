@@ -60,7 +60,7 @@ public class KeyStoreCertificateBucket implements CertificateBucket {
             final KeyStore keyStore = getKeyStore();
             final Enumeration<String> aliases = keyStore.aliases();
 
-            return new Iterator<X509Certificate>() {
+            return new Iterator<>() {
                 @Override
                 public boolean hasNext() {
                     return aliases.hasMoreElements();

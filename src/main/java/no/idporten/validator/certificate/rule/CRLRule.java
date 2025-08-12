@@ -11,7 +11,7 @@ import org.bouncycastle.asn1.x509.CRLDistPoint;
 import org.bouncycastle.asn1.x509.DistributionPoint;
 import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.GeneralNames;
-import org.bouncycastle.x509.extension.X509ExtensionUtil;
+import org.bouncycastle.cert.jcajce.JcaX509ExtensionUtils;
 
 import java.io.IOException;
 import java.security.cert.X509CRL;
@@ -57,7 +57,7 @@ public class CRLRule extends AbstractRule {
             if (!certificate.getNonCriticalExtensionOIDs().contains(CRL_EXTENSION))
                 return urls;
 
-            CRLDistPoint distPoint = CRLDistPoint.getInstance(X509ExtensionUtil.fromExtensionValue(certificate.getExtensionValue(CRL_EXTENSION)));
+            CRLDistPoint distPoint = CRLDistPoint.getInstance(JcaX509ExtensionUtils.parseExtensionValue(certificate.getExtensionValue(CRL_EXTENSION)));
             for (DistributionPoint dp : distPoint.getDistributionPoints())
                 for (GeneralName name : ((GeneralNames) dp.getDistributionPoint().getName()).getNames())
                     if (name.getTagNo() == GeneralName.uniformResourceIdentifier)
