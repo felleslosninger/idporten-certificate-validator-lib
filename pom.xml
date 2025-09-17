@@ -14,7 +14,7 @@
         <junit-jupiter-version>5.13.4</junit-jupiter-version>
         <surefire.plugin.version>3.5.3</surefire.plugin.version>
         <mockito.version>1.10.19</mockito.version>
-        <bc-jdk18on.version>1.81</bc-jdk18on.version>
+        <bc-jdk18on.version>1.82</bc-jdk18on.version>
         <slf4j-api.version>2.0.17</slf4j-api.version>
     </properties>
 
