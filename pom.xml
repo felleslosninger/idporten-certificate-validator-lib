@@ -10,10 +10,10 @@
     <description>Validator for certificates</description>
 
     <properties>
-        <java.version>11</java.version>
-        <junit-jupiter-version>5.13.4</junit-jupiter-version>
-        <surefire.plugin.version>3.5.3</surefire.plugin.version>
-        <mockito.version>1.10.19</mockito.version>
+        <java.version>21</java.version>
+        <junit-jupiter-version>6.0.0</junit-jupiter-version>
+        <surefire.plugin.version>3.5.4</surefire.plugin.version>
+        <mockito.version>5.20.0</mockito.version>
         <bc-jdk18on.version>1.81</bc-jdk18on.version>
         <slf4j-api.version>2.0.17</slf4j-api.version>
     </properties>
@@ -21,7 +21,7 @@
     <dependencies>
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
+            <artifactId>mockito-core</artifactId>
             <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
@@ -60,16 +60,25 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>properties</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${surefire.plugin.version}</version>
                 <configuration>
                     <testFailureIgnore>false</testFailureIgnore>
-                    <systemProperties>
-                        <property>
-                            <name>junit.jupiter.extensions.autodetection.enabled</name>
-                            <value>true</value>
-                        </property>
-                    </systemProperties>
+                    <argLine>-javaagent:${org.mockito:mockito-core:jar}</argLine>
+                    <systemPropertyVariables>
+                        <junit.jupiter.extensions.autodetection.enabled>true</junit.jupiter.extensions.autodetection.enabled>
+                    </systemPropertyVariables>
                 </configuration>
             </plugin>
         </plugins>
