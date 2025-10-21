@@ -23,16 +23,18 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>${mockito.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j-api.version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- TEST dependencies -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -40,12 +42,11 @@
             <version>${junit-jupiter-version}</version>
             <scope>test</scope>
         </dependency>
-
-        <!-- TEST dependencies -->
         <dependency>
             <groupId>com.nimbusds</groupId>
             <artifactId>oauth2-oidc-sdk</artifactId>
             <version>${nimbus.oauth2-oidc-sdk.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <!-- BouncyCastle -->
@@ -88,6 +89,7 @@
                 <version>${surefire.plugin.version}</version>
                 <configuration>
                     <testFailureIgnore>false</testFailureIgnore>
+                    <!-- ref. mockito documentation this is required on newer JDKs-->
                     <argLine>-javaagent:${org.mockito:mockito-core:jar}</argLine>
                     <systemPropertyVariables>
                         <junit.jupiter.extensions.autodetection.enabled>true</junit.jupiter.extensions.autodetection.enabled>
