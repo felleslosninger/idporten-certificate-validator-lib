@@ -16,6 +16,7 @@
         <mockito.version>5.20.0</mockito.version>
         <bc-jdk18on.version>1.81</bc-jdk18on.version>
         <slf4j-api.version>2.0.17</slf4j-api.version>
+        <nimbus.oauth2-oidc-sdk.version>11.28</nimbus.oauth2-oidc-sdk.version>
     </properties>
 
     <dependencies>
@@ -37,6 +38,14 @@
             <version>${junit-jupiter-version}</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- TEST dependencies -->
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>oauth2-oidc-sdk</artifactId>
+            <version>${nimbus.oauth2-oidc-sdk.version}</version>
+        </dependency>
+
         <!-- BouncyCastle -->
         <dependency>
             <groupId>org.bouncycastle</groupId>
@@ -83,6 +92,5 @@
             </plugin>
         </plugins>
     </build>
-
 
 </project>
