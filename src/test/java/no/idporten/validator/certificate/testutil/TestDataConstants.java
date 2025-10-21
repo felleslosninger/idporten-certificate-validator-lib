@@ -14,8 +14,5 @@ public class TestDataConstants {
             return url;
         }
     }
-
-
-
 }
 

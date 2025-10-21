@@ -10,7 +10,9 @@
     <description>Validator for certificates</description>
 
     <properties>
-        <java.version>21</java.version>
+        <java.source.version>21</java.source.version>
+        <java.target.version>21</java.target.version>
+        <java.release.version>11</java.release.version>
         <junit-jupiter-version>6.0.0</junit-jupiter-version>
         <surefire.plugin.version>3.5.4</surefire.plugin.version>
         <mockito.version>5.20.0</mockito.version>
@@ -61,8 +63,10 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.14.0</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <encoding>UTF-8</encoding>
+                    <source>${java.source.version}</source>
+                    <target>${java.target.version}</target>
+                    <release>${java.release.version}</release>
                     <compilerArgs>
                         <arg>-parameters</arg>
                     </compilerArgs>                         

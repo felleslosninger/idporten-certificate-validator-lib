@@ -1,6 +1,5 @@
 package no.idporten.validator.certificate.testutil;
 
-import com.nimbusds.jose.util.Base64;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.KeyUsage;
@@ -20,35 +19,16 @@ import java.io.InputStream;
 import java.math.BigInteger;
 import java.net.URI;
 import java.security.*;
-import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Utilities for test data.
  */
 public class TestDataUtils {
 
-
-    public static List<Base64> toBase64(X509Certificate[] chain) {
-        var output = new ArrayList<Base64>(chain.length);
-        var encoder = java.util.Base64.getEncoder();
-
-        try {
-            for (X509Certificate cert : chain) {
-                String encodedCert = encoder.encodeToString(cert.getEncoded());
-                output.add(Base64.from(encodedCert));
-            }
-
-        } catch (CertificateEncodingException e) {
-            throw new RuntimeException(e);
-        }
-        return output;
-    }
 
     public static KeyPair generateRSAKeyPair() {
         try {
@@ -65,6 +45,17 @@ public class TestDataUtils {
     }
 
 
+    /**
+     * Generates an X509 certificate.
+     * @param subjectKey the public key for the subject.
+     * @param signingKey the private key used to sign the certificate.
+     * @param issuer the issuer distinguished name.
+     * @param subject the subject distinguished name.
+     * @param notBefore date when the certificate was issued
+     * @param notAfter date when the certificate expires
+     * @param isCA whether the certificate is for a CA. Will set required extensions.
+     * @return the generated X509 certificate.
+     */
     public static X509Certificate generateCertificate(PublicKey subjectKey, PrivateKey signingKey, String issuer, String subject, Date notBefore, Date notAfter, boolean isCA) {
         X500Name iss = new X500Name(issuer);
         X500Name sub = new X500Name(subject);
