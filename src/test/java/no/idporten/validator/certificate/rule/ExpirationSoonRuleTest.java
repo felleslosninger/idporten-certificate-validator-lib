@@ -17,9 +17,9 @@ public class ExpirationSoonRuleTest extends X509TestGenerator {
     @Test
     @DisplayName("validation should pass if expiration is more than x days after today or else fail")
     public void simple() throws Exception {
-        Validator validatorHelper = new Validator(new ExpirationSoonRule(5 * 24 * 60 * 60 * 1000));
+        Validator validatorHelper = new Validator(new ExpirationSoonRule(5 * 24 * 60 * 60 * 1000)); // 5 days in milliseconds
 
-        ZonedDateTime now = ZonedDateTime.now(ZoneId.systemDefault());
+        ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC")); // UTC to avoid DST edge cases
         assertTrue(validatorHelper.isValid(createX509Certificate(toDate(now.plusDays(1)), toDate(now.plusDays(10)))));
         assertTrue(validatorHelper.isValid(createX509Certificate(toDate(now.plusDays(1)), toDate(now.plusDays(6)))));
         assertTrue(validatorHelper.isValid(createX509Certificate(toDate(now.plusDays(1)), toDate(now.plusDays(5).plusMinutes(1)))));
