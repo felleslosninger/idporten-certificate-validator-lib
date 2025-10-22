@@ -46,7 +46,7 @@ public class ChainRuleTest {
         final X509Certificate intermediateCertificate = generateCertificate(intermediateKeys.getPublic(), caKeys.getPrivate(), "CN=Sertifikatcompagniet CA", "CN=Sertifikatcompagniet Intermediate",
                 Date.from(now.minus(halfYear)), Date.from(now.plus(180, DAYS)), true, false);
         final X509Certificate signatureCertificate = generateCertificate(signatureKeys.getPublic(), intermediateKeys.getPrivate(), "CN=Sertifikatcompagniet Intermediate", "CN=Sertifikatcompagniet Testsertifikat",
-                Date.from(now.minus(halfYear)), Date.from(now.plus(90, DAYS)), true, false);
+                Date.from(now.minus(halfYear)), Date.from(now.plus(90, DAYS)), false, false);
 
 
         CertificateBucket rootCertificates = new SimpleCertificateBucket(rootCertificate);
