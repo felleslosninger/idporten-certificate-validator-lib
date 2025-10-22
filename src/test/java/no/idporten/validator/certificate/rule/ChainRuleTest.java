@@ -17,6 +17,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
 
+import static java.time.temporal.ChronoUnit.DAYS;
 import static no.idporten.validator.certificate.testutil.TestDataUtils.generateCertificate;
 import static no.idporten.validator.certificate.testutil.TestDataUtils.generateRSAKeyPair;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,15 +36,17 @@ public class ChainRuleTest {
 
         // given we have a valid key set
         final var halfYear = Duration.ofDays(180);
-        final var validStart = Date.from(Instant.now().minus(halfYear));
-        final var validEnd = Date.from(Instant.now().plus(halfYear));
+        final var now = Instant.now();
         final var caKeys = generateRSAKeyPair();
         final var intermediateKeys = generateRSAKeyPair();
         final var signatureKeys = generateRSAKeyPair();
 
-        final X509Certificate rootCertificate = generateCertificate(caKeys.getPublic(), caKeys.getPrivate(), "CN=Sertifikatcompagniet CA", "CN=Sertifikatcompagniet CA", validStart, validEnd, true);
-        final X509Certificate intermediateCertificate = generateCertificate(intermediateKeys.getPublic(), caKeys.getPrivate(), "CN=Sertifikatcompagniet CA", "CN=Sertifikatcompagniet Intermediate", validStart, validEnd, true);
-        final X509Certificate signatureCertificate = generateCertificate(signatureKeys.getPublic(), intermediateKeys.getPrivate(), "CN=Sertifikatcompagniet Intermediate", "CN=Sertifikatcompagniet Testsertifikat", validStart, validEnd, false);
+        final X509Certificate rootCertificate = generateCertificate(caKeys.getPublic(), caKeys.getPrivate(), "CN=Sertifikatcompagniet CA", "CN=Sertifikatcompagniet CA",
+                Date.from(now.minus(halfYear)), Date.from(now.plus(720, DAYS)), true, true);
+        final X509Certificate intermediateCertificate = generateCertificate(intermediateKeys.getPublic(), caKeys.getPrivate(), "CN=Sertifikatcompagniet CA", "CN=Sertifikatcompagniet Intermediate",
+                Date.from(now.minus(halfYear)), Date.from(now.plus(180, DAYS)), true, false);
+        final X509Certificate signatureCertificate = generateCertificate(signatureKeys.getPublic(), intermediateKeys.getPrivate(), "CN=Sertifikatcompagniet Intermediate", "CN=Sertifikatcompagniet Testsertifikat",
+                Date.from(now.minus(halfYear)), Date.from(now.plus(90, DAYS)), true, false);
 
 
         CertificateBucket rootCertificates = new SimpleCertificateBucket(rootCertificate);
