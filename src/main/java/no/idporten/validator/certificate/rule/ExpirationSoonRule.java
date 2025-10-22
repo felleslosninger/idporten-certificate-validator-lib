@@ -4,6 +4,11 @@ import no.idporten.validator.certificate.api.CertificateValidationException;
 import no.idporten.validator.certificate.api.FailedValidationException;
 
 import java.security.cert.X509Certificate;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.util.TimeZone;
 
 /**
  * Validation making sure certificate doesn't expire in n milliseconds.

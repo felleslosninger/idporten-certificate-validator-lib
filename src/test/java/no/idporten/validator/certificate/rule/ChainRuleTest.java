@@ -7,22 +7,48 @@ import no.idporten.validator.certificate.api.CertificateBucket;
 import no.idporten.validator.certificate.api.FailedValidationException;
 import no.idporten.validator.certificate.util.SimpleCertificateBucket;
 import no.idporten.validator.certificate.util.SimpleReport;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.security.Security;
 import java.security.cert.X509Certificate;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Date;
 
+import static java.time.temporal.ChronoUnit.DAYS;
+import static no.idporten.validator.certificate.testutil.TestDataUtils.generateCertificate;
+import static no.idporten.validator.certificate.testutil.TestDataUtils.generateRSAKeyPair;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("When validating chain of certificates")
 public class ChainRuleTest {
+    static {
+        // required to generate certificates
+        Security.addProvider(new BouncyCastleProvider());
+    }
 
     @DisplayName("Simple, valid certificate chain should validate ok")
     @Test
     public void simple() throws Exception {
-        X509Certificate intermediateCertificate = Validator.getCertificate(getClass().getResourceAsStream("/commfides_intermediate_g3_test.cer"));
-        X509Certificate rootCertificate = Validator.getCertificate(getClass().getResourceAsStream("/commfides_root_g3_test.cer"));
+
+        // given we have a valid key set
+        final var halfYear = Duration.ofDays(180);
+        final var now = Instant.now();
+        final var caKeys = generateRSAKeyPair();
+        final var intermediateKeys = generateRSAKeyPair();
+        final var signatureKeys = generateRSAKeyPair();
+
+        final X509Certificate rootCertificate = generateCertificate(caKeys.getPublic(), caKeys.getPrivate(), "CN=Sertifikatcompagniet CA", "CN=Sertifikatcompagniet CA",
+                Date.from(now.minus(halfYear)), Date.from(now.plus(720, DAYS)), true, true);
+        final X509Certificate intermediateCertificate = generateCertificate(intermediateKeys.getPublic(), caKeys.getPrivate(), "CN=Sertifikatcompagniet CA", "CN=Sertifikatcompagniet Intermediate",
+                Date.from(now.minus(halfYear)), Date.from(now.plus(180, DAYS)), true, false);
+        final X509Certificate signatureCertificate = generateCertificate(signatureKeys.getPublic(), intermediateKeys.getPrivate(), "CN=Sertifikatcompagniet Intermediate", "CN=Sertifikatcompagniet Testsertifikat",
+                Date.from(now.minus(halfYear)), Date.from(now.plus(90, DAYS)), false, false);
+
+
         CertificateBucket rootCertificates = new SimpleCertificateBucket(rootCertificate);
         CertificateBucket intermediateCertificates = new SimpleCertificateBucket(intermediateCertificate);
 
@@ -30,9 +56,9 @@ public class ChainRuleTest {
                 .addRule(new ChainRule(rootCertificates, intermediateCertificates))
                 .build();
 
-        validator.validate(getClass().getResourceAsStream("/digdir_seid2.cer"));
-        validator.validate(getClass().getResourceAsStream("/commfides_intermediate_g3_test.cer"));
-        validator.validate(getClass().getResourceAsStream("/commfides_root_g3_test.cer"), SimpleReport.newInstance());
+        validator.validate(signatureCertificate);
+        validator.validate(intermediateCertificate);
+        validator.validate(rootCertificate, SimpleReport.newInstance());
     }
 
     @DisplayName("If root certificates are missing, should fail with message")

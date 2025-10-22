@@ -10,7 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import java.security.cert.X509Certificate;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("When validating and parsing norwegian organization numbers")
 class NorwegianOrganizationNumberRuleTest {
@@ -123,7 +124,7 @@ class NorwegianOrganizationNumberRuleTest {
     @Test
     @DisplayName("validation should pass with valid certificate issued by Commfides")
     public void testingMoveCertificate() throws Exception {
-        X509Certificate certificate = Validator.getCertificate(getClass().getResourceAsStream("/digdir_seid2.cer"));
+        X509Certificate certificate = Validator.getCertificate(getClass().getResourceAsStream("/commfides_intermediate_g3_test.cer"));
 
         Validator validator = ValidatorBuilder.newInstance()
                 .addRule(new ExpirationRule())
