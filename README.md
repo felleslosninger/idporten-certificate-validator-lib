@@ -5,7 +5,7 @@ Dette biblioteket inneholder en implementasjon av et sertifikatvalideringsbiblio
 
 ## Forutsetninger
 
-- Java 21
+- Java 11
 - Maven
 
 ## Bruk
