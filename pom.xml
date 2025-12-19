@@ -13,7 +13,7 @@
         <java.version>11</java.version>
         <junit-jupiter-version>5.13.4</junit-jupiter-version>
         <surefire.plugin.version>3.5.4</surefire.plugin.version>
-        <mockito.version>5.20.0</mockito.version>
+        <mockito.version>5.21.0</mockito.version>
         <bc-jdk18on.version>1.81</bc-jdk18on.version>
         <slf4j-api.version>2.0.17</slf4j-api.version>
         <nimbus.oauth2-oidc-sdk.version>11.30.1</nimbus.oauth2-oidc-sdk.version>
