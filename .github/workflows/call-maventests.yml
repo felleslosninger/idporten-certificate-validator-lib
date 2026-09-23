@@ -15,5 +15,5 @@ jobs:
       contents: write
       pull-requests: write
     with:
-      java-version: 11
+      java-version: 21
     secrets: inherit
