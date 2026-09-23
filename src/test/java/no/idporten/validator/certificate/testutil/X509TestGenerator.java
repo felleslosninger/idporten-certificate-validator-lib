@@ -29,7 +29,7 @@ public class X509TestGenerator {
 
     public X509Certificate createX509Certificate(Date from, Date to) throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, CertificateException, OperatorCreationException, CertIOException {
         String domainName = "test";
-        return createX509Certificate(null, "CN=" + domainName + ", OU=None, O=None, L=None, C=None", null, from, to);
+        return createX509Certificate(null, "CN=" + domainName + ", OU=None, O=None, L=None, C=NO", null, from, to);
     }
 
     public X509Certificate createX509Certificate(String subject, X509ExtensionCustom custom, Date from, Date to) throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, CertificateException, OperatorCreationException, CertIOException {
@@ -50,7 +50,7 @@ public class X509TestGenerator {
         if(issuer != null)
             issuerName = new X500Name(issuer.getSubjectX500Principal().getName());
         else
-            issuerName = new X500Name("CN=" + "test" + ", OU=None, O=None, L=None, C=None");
+            issuerName = new X500Name("CN=" + "test" + ", OU=None, O=None, L=None, C=NO");
 
         SubjectPublicKeyInfo subjPubKeyInfo = new SubjectPublicKeyInfo(ASN1Sequence.getInstance(RSAPubKey.getEncoded()));
 
@@ -77,7 +77,7 @@ public class X509TestGenerator {
 
     public X509Certificate createX509Certificate(X509ExtensionCustom x509ExtensionCustom) throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, CertificateException, OperatorCreationException, CertIOException {
         String domainName = "test";
-        return createX509Certificate("CN=" + domainName + ", OU=None, O=None, L=None, C=None", x509ExtensionCustom, toDate(ZonedDateTime.now(ZoneId.systemDefault()).minusYears(1)), toDate(ZonedDateTime.now(ZoneId.systemDefault()).plusYears(1)));
+        return createX509Certificate("CN=" + domainName + ", OU=None, O=None, L=None, C=NO", x509ExtensionCustom, toDate(ZonedDateTime.now(ZoneId.systemDefault()).minusYears(1)), toDate(ZonedDateTime.now(ZoneId.systemDefault()).plusYears(1)));
     }
 
     public X509Certificate createX509Certificate() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, CertificateException, OperatorCreationException, CertIOException {
